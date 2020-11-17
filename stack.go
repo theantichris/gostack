@@ -24,12 +24,12 @@ func (stack *Stack) Pop() Item {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 
-	if stack.IsEmpty() {
+	if len(stack.items) == 0 {
 		return nil
 	}
 
-	lastItem := stack.items[stack.Length()-1]
-	stack.items = stack.items[:stack.Length()-1]
+	lastItem := stack.items[len(stack.items)-1]
+	stack.items = stack.items[:len(stack.items)-1]
 
 	return lastItem
 }
@@ -39,7 +39,7 @@ func (stack *Stack) IsEmpty() bool {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 
-	return stack.Length() == 0
+	return len(stack.items) == 0
 }
 
 // Reset removes all Items from the Stack.
@@ -55,7 +55,7 @@ func (stack *Stack) Dump() []Item {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 
-	copied := make([]Item, stack.Length())
+	copied := make([]Item, len(stack.items))
 	copy(copied, stack.items)
 
 	return copied
@@ -66,14 +66,9 @@ func (stack *Stack) Peek() Item {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 
-	if stack.IsEmpty() {
+	if len(stack.items) == 0 {
 		return nil
 	}
 
-	return stack.items[stack.Length()-1]
-}
-
-// Length returns the number of Items on the Stack.
-func (stack *Stack) Length() int {
-	return len(stack.items)
+	return stack.items[len(stack.items)-1]
 }
